@@ -2,5 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.menetrend.MainActivity" >
+    <item android:id="@+id/menuInfo" android:title="Info"></item>
 
 </menu>

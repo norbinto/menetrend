@@ -22,6 +22,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.menetrend.buszDBS.Busz;
@@ -43,6 +50,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 	private DBSUpdater dbsUpdater = null;
 	private BuszDataSource buszDataSource;
 	private KivetelesNapDataSource kivnapDataSource;
+	private PopupWindow popupWindow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,30 +92,24 @@ public class MainActivity extends FragmentActivity implements Communicator,
 
 	private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
-			// boolean noConnectivity =
-			// intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,
-			// false);
-			// String reason =
-			// intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
-			// boolean isFailover =
-			// intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER,
-			// false);
 
 			NetworkInfo currentNetworkInfo = (NetworkInfo) intent
 					.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-			// NetworkInfo otherNetworkInfo = (NetworkInfo)
-			// intent.getParcelableExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO);
 
 			if (currentNetworkInfo.isConnected()) {
 
 				if (DBSUpdater.hasWIFIConnection(context)) {
-					dbsUpdater = new DBSUpdater(context, (DownloadCompelteListener)context);
-					dbsUpdater.execute("http://norbinto.ddns.net:8080/napok.txt");
+					dbsUpdater = new DBSUpdater(context,
+							(DownloadCompelteListener) context);
+					dbsUpdater
+							.execute("http://norbinto.ddns.net:8080/napok.txt");
 				}
 				Toast.makeText(getApplicationContext(), "Connected",
 						Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(getApplicationContext(), "Esetleges adatbázis frissítéshez csatlakozzon wifi hálózathoz!",
+				Toast.makeText(
+						getApplicationContext(),
+						"Esetleges adatbázis frissítéshez csatlakozzon wifi hálózathoz!",
 						Toast.LENGTH_LONG).show();
 			}
 		}
@@ -120,9 +122,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		kivnapDataSource.open();
 		Log.v("SImpledateformat",
 				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		// String extra = kivnapDataSource
-		// .getSpecialTimetable(new SimpleDateFormat("yyyy-MM-dd")
-		// .format(new Date()));
+
 		String extra = null;
 		List<KivetelesNap> kk = kivnapDataSource.getAllKivetelesNap();
 		for (int i = 0; i < kk.size(); i++) {
@@ -170,6 +170,33 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		Editor edtr = sp.edit();
 		edtr.putBoolean(KEY_FIRST_RUN_FLAG, false);
 		edtr.commit();
+	}
+
+	@Override  
+    public boolean onCreateOptionsMenu(Menu menu) {  
+        // Inflate the menu; this adds items to the action bar if it is present.  
+        getMenuInflater().inflate(R.menu.main, menu);//Menu Resource, Menu  
+        return true;  
+    }  
+	
+	public void onClick(View v){
+		popupWindow.dismiss();
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	    LayoutInflater layoutInflater 
+	     = (LayoutInflater)getBaseContext()
+	      .getSystemService(LAYOUT_INFLATER_SERVICE);  
+		View popupView= layoutInflater.inflate(R.layout.info_popup, null);
+		
+		popupWindow = new PopupWindow(
+	               popupView, 
+	               LayoutParams.WRAP_CONTENT,  
+	                     LayoutParams.WRAP_CONTENT);  
+		
+		popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+		return super.onMenuItemSelected(featureId, item);
 	}
 
 	@Override
@@ -291,7 +318,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		buszDataSource.createNote(new Busz("13:20", 4, "SZ", "DB", "", 3));
 		buszDataSource.createNote(new Busz("13:45", 4, "HK", "DB", "", 0));
 		buszDataSource.createNote(new Busz("14:00", 3, "HS", "DB", "", 0));
-		buszDataSource.createNote(new Busz("14:05", 7, "NA", "DB", "", 0));// Sz�nd�kosan
+		buszDataSource.createNote(new Busz("14:00", 7, "HS", "DB", "", 0));// Sz�nd�kosan
 																			// NA
 																			// mert
 																			// itt

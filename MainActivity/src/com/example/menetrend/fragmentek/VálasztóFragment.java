@@ -75,7 +75,6 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		Log.v("VÁLASZTOFRAGMENT onclick honnan: ", ((Megallo) snHonnan.getSelectedItem()).getId()+"");
 		comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
 				+ ((Megallo) snHova.getSelectedItem()).getId());
 	}
