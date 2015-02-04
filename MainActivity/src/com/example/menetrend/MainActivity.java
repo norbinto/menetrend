@@ -192,10 +192,10 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		
 		popupWindow = new PopupWindow(
 	               popupView, 
-	               LayoutParams.WRAP_CONTENT,  
-	                     LayoutParams.WRAP_CONTENT);  
+	               LayoutParams.MATCH_PARENT,  
+	                     LayoutParams.MATCH_PARENT);  
 		
-		popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+		popupWindow.showAtLocation(popupView, Gravity.CENTER,0, 0);
 		return super.onMenuItemSelected(featureId, item);
 	}
 
