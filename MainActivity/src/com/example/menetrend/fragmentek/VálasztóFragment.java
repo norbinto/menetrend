@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 	public Spinner snHova;
 	public Button btnOk;
 	public Communicator comm;
+	public DatePicker dpDate;
+	
 	
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,12 +49,13 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		snHova = (Spinner) getActivity().findViewById(R.id.snHova);
 		btnOk = (Button) getActivity().findViewById(R.id.btnOk);
 		comm = (Communicator) getActivity();
-
+		dpDate= (DatePicker) getActivity().findViewById(R.id.dpDate);
 
 		btnOk.setOnClickListener(this);
 		snHonnan.setOnItemSelectedListener(this);
 		snHova.setOnItemSelectedListener(this);
-		
+		dpDate.setOnClickListener(this);
+	
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item,
@@ -74,10 +78,25 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
-				+ ((Megallo) snHova.getSelectedItem()).getId());
+		switch (v.getId()) {
+		case R.id.dpDate:
+			dpDateOnDateChange();
+			break;
+		case R.id.button1:
+			comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
+					+ ((Megallo) snHova.getSelectedItem()).getId());
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 
+	public void dpDateOnDateChange(){
+		
+	}
+	
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {

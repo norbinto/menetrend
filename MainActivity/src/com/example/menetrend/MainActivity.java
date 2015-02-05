@@ -110,6 +110,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
 		VálasztóFragment vf = new VálasztóFragment();
+		
 		ft.add(R.id.frameLayout, vf, VálasztóFragment.TAG);
 		ft.commit();
 
@@ -214,13 +215,13 @@ public class MainActivity extends FragmentActivity implements Communicator,
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);// Menu Resource, Menu
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
 	public void onClick(View v) {
 		try {
+			popupWindow.dismiss();
 		} catch (Exception ex) {
 			Log.e("MAINACTIVITY popupbezárás", ex.toString());
 		}
