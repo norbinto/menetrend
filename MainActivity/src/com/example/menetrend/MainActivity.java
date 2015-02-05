@@ -1,5 +1,6 @@
 package com.example.menetrend;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.DatePicker;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -51,6 +54,31 @@ public class MainActivity extends FragmentActivity implements Communicator,
 	private BuszDataSource buszDataSource;
 	private KivetelesNapDataSource kivnapDataSource;
 	private PopupWindow popupWindow;
+	private DatePicker dpDate;
+
+	private int year;
+	private int month;
+	private int day;
+
+	@Override
+	public View onCreateView(String name, Context context, AttributeSet attrs) {
+
+		dpDate = (DatePicker) findViewById(R.id.dpDate);
+
+		return super.onCreateView(name, context, attrs);
+	}
+
+	public void setCurrentDateOnView() {
+
+		Calendar c = Calendar.getInstance();
+		year = c.get(Calendar.YEAR);
+		month = c.get(Calendar.MONTH);
+		day = c.get(Calendar.DAY_OF_MONTH);
+
+		// set current date into datepicker
+		dpDate.init(year, month, day, null);
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,18 +148,21 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		String ret = "";
 		kivnapDataSource.close();
 		kivnapDataSource.open();
+
 		Log.v("SImpledateformat",
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+				new SimpleDateFormat("yyyy-MM-dd").format(new Date(dpDate.getYear() - 1900,
+						dpDate.getMonth(), dpDate.getDayOfMonth())));
 
 		String extra = null;
 		List<KivetelesNap> kk = kivnapDataSource.getAllKivetelesNap();
 		for (int i = 0; i < kk.size(); i++) {
 			if (kk.get(i).datum.equals((new SimpleDateFormat("yyyy-MM-dd")
-					.format(new Date())).toString())) {
+					.format(new Date(dpDate.getYear() - 1900,
+							dpDate.getMonth(), dpDate.getDayOfMonth())))
+					.toString())) {
 				extra = kk.get(i).közlekedik;
 			}
 		}
-
 		// Log.v("MAINACTIVITY KOZ EXTRA ", "extra : " + extra);
 
 		if (extra != null) {
@@ -139,8 +170,17 @@ public class MainActivity extends FragmentActivity implements Communicator,
 			ret = extra;
 		} else {
 			Calendar c = Calendar.getInstance();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				c.setTime(sdf.parse((dpDate.getYear() - 1900)+"-"+dpDate.getMonth()+"-"+dpDate.getDayOfMonth()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}// all done
+			
 			int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-
+			Log.v("DAYOFWEEK",dayOfWeek+"");
 			switch (dayOfWeek) {
 			case Calendar.SUNDAY:
 				ret = "0127";
@@ -172,30 +212,31 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		edtr.commit();
 	}
 
-	@Override  
-    public boolean onCreateOptionsMenu(Menu menu) {  
-        // Inflate the menu; this adds items to the action bar if it is present.  
-        getMenuInflater().inflate(R.menu.main, menu);//Menu Resource, Menu  
-        return true;  
-    }  
-	
-	public void onClick(View v){
-		popupWindow.dismiss();
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);// Menu Resource, Menu
+		return true;
 	}
-	
+
+	public void onClick(View v) {
+		try {
+			popupWindow.dismiss();
+		} catch (Exception ex) {
+			Log.e("MAINACTIVITY popupbezárás", ex.toString());
+		}
+	}
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	    LayoutInflater layoutInflater 
-	     = (LayoutInflater)getBaseContext()
-	      .getSystemService(LAYOUT_INFLATER_SERVICE);  
-		View popupView= layoutInflater.inflate(R.layout.info_popup, null);
-		
-		popupWindow = new PopupWindow(
-	               popupView, 
-	               LayoutParams.MATCH_PARENT,  
-	                     LayoutParams.MATCH_PARENT);  
-		
-		popupWindow.showAtLocation(popupView, Gravity.CENTER,0, 0);
+		LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View popupView = layoutInflater.inflate(R.layout.info_popup, null);
+
+		popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+
+		popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
 		return super.onMenuItemSelected(featureId, item);
 	}
 
