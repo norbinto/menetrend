@@ -149,7 +149,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		kivnapDataSource.close();
 		kivnapDataSource.open();
 
-		Log.v("SImpledateformat",
+		Log.v("Simpledateformat",
 				new SimpleDateFormat("yyyy-MM-dd").format(new Date(dpDate.getYear() - 1900,
 						dpDate.getMonth(), dpDate.getDayOfMonth())));
 
@@ -163,7 +163,6 @@ public class MainActivity extends FragmentActivity implements Communicator,
 				extra = kk.get(i).közlekedik;
 			}
 		}
-		// Log.v("MAINACTIVITY KOZ EXTRA ", "extra : " + extra);
 
 		if (extra != null) {
 			// Log.v("MAINACTIVITY KOZ", "EXTRA NAP JÖN");
@@ -173,9 +172,10 @@ public class MainActivity extends FragmentActivity implements Communicator,
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				c.setTime(sdf.parse((dpDate.getYear() - 1900)+"-"+dpDate.getMonth()+"-"+dpDate.getDayOfMonth()));
+				c.setTime(sdf.parse((dpDate.getYear())+"-"+(dpDate.getMonth()+1)+"-"+dpDate.getDayOfMonth()));
+				Log.e("C settime után",c.getTime().toString());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				Log.e("CALENDAR PARSE ERROR",e.toString());
 				e.printStackTrace();
 			}// all done
 			
@@ -221,7 +221,6 @@ public class MainActivity extends FragmentActivity implements Communicator,
 
 	public void onClick(View v) {
 		try {
-			popupWindow.dismiss();
 		} catch (Exception ex) {
 			Log.e("MAINACTIVITY popupbezárás", ex.toString());
 		}

@@ -3,7 +3,6 @@ package com.example.menetrend.fragmentek;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +29,7 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 	public Spinner snHova;
 	public Button btnOk;
 	public Communicator comm;
-
+	
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.valaszto_fragment, container, false);
@@ -48,10 +47,11 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		btnOk = (Button) getActivity().findViewById(R.id.btnOk);
 		comm = (Communicator) getActivity();
 
+
 		btnOk.setOnClickListener(this);
 		snHonnan.setOnItemSelectedListener(this);
 		snHova.setOnItemSelectedListener(this);
-
+		
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item,
@@ -61,10 +61,9 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		snHonnan.setAdapter(dataAdapter);
 		snHova.setAdapter(dataAdapter);
-		
-		
+
 	}
-	
+
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
