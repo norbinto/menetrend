@@ -1,5 +1,10 @@
 package com.example.menetrend.fragmentek;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,8 +36,8 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 	public Button btnOk;
 	public Communicator comm;
 	public DatePicker dpDate;
-	
-	
+	public TextView tvDate;
+
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.valaszto_fragment, container, false);
@@ -49,13 +54,14 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		snHova = (Spinner) getActivity().findViewById(R.id.snHova);
 		btnOk = (Button) getActivity().findViewById(R.id.btnOk);
 		comm = (Communicator) getActivity();
-		dpDate= (DatePicker) getActivity().findViewById(R.id.dpDate);
+		dpDate = (DatePicker) getActivity().findViewById(R.id.dpDate);
+		tvDate = (TextView) getActivity().findViewById(R.id.tvDate);
 
 		btnOk.setOnClickListener(this);
 		snHonnan.setOnItemSelectedListener(this);
 		snHova.setOnItemSelectedListener(this);
 		dpDate.setOnClickListener(this);
-	
+
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item,
@@ -90,13 +96,27 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		default:
 			break;
 		}
-		
+
 	}
 
-	public void dpDateOnDateChange(){
-		
+	public void dpDateOnDateChange() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		Date d = null;
+		try {
+			d = sdf.parse((dpDate.getYear() - 1900) + "-" + dpDate.getMonth()
+					+ "-" + dpDate.getDayOfMonth());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SimpleDateFormat sdfDateTime = new SimpleDateFormat(
+				"dd EEEE" );
+		String dateStr = sdfDateTime.format(d);
+
+		tvDate.setText(dateStr);
 	}
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
