@@ -54,7 +54,6 @@ public class MainActivity extends FragmentActivity implements Communicator,
 	private BuszDataSource buszDataSource;
 	private KivetelesNapDataSource kivnapDataSource;
 	private PopupWindow popupWindow;
-	private DatePicker dpDate;
 
 	private int year;
 	private int month;
@@ -63,22 +62,10 @@ public class MainActivity extends FragmentActivity implements Communicator,
 	@Override
 	public View onCreateView(String name, Context context, AttributeSet attrs) {
 
-		dpDate = (DatePicker) findViewById(R.id.dpDate);
-
 		return super.onCreateView(name, context, attrs);
 	}
 
-	public void setCurrentDateOnView() {
 
-		Calendar c = Calendar.getInstance();
-		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
-		day = c.get(Calendar.DAY_OF_MONTH);
-
-		// set current date into datepicker
-		dpDate.init(year, month, day, null);
-
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -150,16 +137,16 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		kivnapDataSource.close();
 		kivnapDataSource.open();
 
-		Log.v("Simpledateformat",
-				new SimpleDateFormat("yyyy-MM-dd").format(new Date(dpDate.getYear() - 1900,
-						dpDate.getMonth(), dpDate.getDayOfMonth())));
+//		Log.v("Simpledateformat",
+//				new SimpleDateFormat("yyyy-MM-dd").format(new Date(dpDate.getYear() - 1900,
+//						dpDate.getMonth(), dpDate.getDayOfMonth())));
 
 		String extra = null;
 		List<KivetelesNap> kk = kivnapDataSource.getAllKivetelesNap();
 		for (int i = 0; i < kk.size(); i++) {
 			if (kk.get(i).datum.equals((new SimpleDateFormat("yyyy-MM-dd")
-					.format(new Date(dpDate.getYear() - 1900,
-							dpDate.getMonth(), dpDate.getDayOfMonth())))
+					.format(new Date(year - 1900,
+							month, day)))
 					.toString())) {
 				extra = kk.get(i).közlekedik;
 			}
@@ -173,7 +160,7 @@ public class MainActivity extends FragmentActivity implements Communicator,
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				c.setTime(sdf.parse((dpDate.getYear())+"-"+(dpDate.getMonth()+1)+"-"+dpDate.getDayOfMonth()));
+				c.setTime(sdf.parse((year)+"-"+(month+1)+"-"+day));
 				Log.e("C settime után",c.getTime().toString());
 			} catch (ParseException e) {
 				Log.e("CALENDAR PARSE ERROR",e.toString());
@@ -245,6 +232,12 @@ public class MainActivity extends FragmentActivity implements Communicator,
 
 		ListázóFragment lf = new ListázóFragment();
 		FragmentManager fm = getSupportFragmentManager();
+		VálasztóFragment vf= (VálasztóFragment) fm.findFragmentByTag(VálasztóFragment.TAG);
+		
+		year= vf.getYear();
+		month= vf.getMonth();
+		day=vf.getDay();
+		
 		FragmentTransaction ft = fm.beginTransaction();
 
 		ft.replace(R.id.frameLayout, lf, "asd");

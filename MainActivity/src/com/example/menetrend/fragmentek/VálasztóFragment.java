@@ -2,6 +2,7 @@ package com.example.menetrend.fragmentek;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 	public DatePicker dpDate;
 	public TextView tvDate;
 
+
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.valaszto_fragment, container, false);
@@ -57,6 +60,8 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		dpDate = (DatePicker) getActivity().findViewById(R.id.dpDate);
 		tvDate = (TextView) getActivity().findViewById(R.id.tvDate);
 
+		setCurrentDateOnView();
+
 		btnOk.setOnClickListener(this);
 		snHonnan.setOnItemSelectedListener(this);
 		snHova.setOnItemSelectedListener(this);
@@ -71,6 +76,41 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		snHonnan.setAdapter(dataAdapter);
 		snHova.setAdapter(dataAdapter);
+		Dátumkiírás();
+	}
+
+	public void setCurrentDateOnView() {
+
+		Calendar c = Calendar.getInstance();
+		// set current date into datepicker
+		dpDate.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+				c.get(Calendar.DAY_OF_MONTH), new OnDateChangedListener() {
+
+					@Override
+					public void onDateChanged(DatePicker view, int year,
+							int monthOfYear, int dayOfMonth) {
+						Dátumkiírás();
+					}
+				});
+
+	}
+
+	public void Dátumkiírás() {
+		Calendar sCalendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.");
+
+		try {
+			sCalendar
+					.setTime(sdf.parse((dpDate.getYear())
+							+ "."
+							+ ((dpDate.getMonth() + 1) + "."
+									+ dpDate.getDayOfMonth() + ".")));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String dayLongName = sCalendar.getDisplayName(Calendar.DAY_OF_WEEK,
+				Calendar.LONG, Locale.getDefault());
+		tvDate.setText(sdf.format(sCalendar.getTime()) + " " + dayLongName);
 
 	}
 
@@ -84,37 +124,21 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.dpDate:
-			dpDateOnDateChange();
-			break;
-		case R.id.button1:
-			comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
-					+ ((Megallo) snHova.getSelectedItem()).getId());
-			break;
-
-		default:
-			break;
-		}
-
+		
+		comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
+				+ ((Megallo) snHova.getSelectedItem()).getId());
 	}
 
-	public void dpDateOnDateChange() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-		Date d = null;
-		try {
-			d = sdf.parse((dpDate.getYear() - 1900) + "-" + dpDate.getMonth()
-					+ "-" + dpDate.getDayOfMonth());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public int getYear() {
+		return dpDate.getYear();
+	}
 
-		SimpleDateFormat sdfDateTime = new SimpleDateFormat(
-				"dd EEEE" );
-		String dateStr = sdfDateTime.format(d);
+	public int getMonth() {
+		return dpDate.getMonth();
+	}
 
-		tvDate.setText(dateStr);
+	public int getDay() {
+		return dpDate.getDayOfMonth();
 	}
 
 	@Override
