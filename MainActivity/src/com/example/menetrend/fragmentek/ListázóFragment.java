@@ -162,6 +162,25 @@ public class ListázóFragment extends Fragment {
 	// REFAKTORIZÁLNI!!!!!!!!!!!!
 	private void honnanhova(int honnan_id, int hova_id,
 			LinkedList<Busz> values, boolean sámsonDebrecen) {
+		//először törli ami fölösleges mert a másik irányba megy
+		if (sámsonDebrecen) {
+			// ami DB-ből indul delete
+			for (int i = 0; i < values.size(); i++) {
+				if ("DB".equals(((Busz) values.get(i)).getHonnan())) {
+					values.remove(i);
+					i--;
+				}
+			}
+		} else {
+			// ami NEM DB-ből indul delete
+			for (int i = 0; i < values.size(); i++) {
+				if ("DB".equals(((Busz) values.get(i)).getHova())) {
+					values.remove(i);
+					i--;
+				}
+			}
+		}
+		
 		boolean nincsbenne = true;
 		Megállók megállók = new Megállók();
 		int menetido = 0;
@@ -351,23 +370,7 @@ public class ListázóFragment extends Fragment {
 			}
 		}
 
-		if (sámsonDebrecen) {
-			// ami DB-ből indul delete
-			for (int i = 0; i < values.size(); i++) {
-				if ("DB".equals(((Busz) values.get(i)).getHonnan())) {
-					values.remove(i);
-					i--;
-				}
-			}
-		} else {
-			// ami NEM DB-ből indul delete
-			for (int i = 0; i < values.size(); i++) {
-				if ("DB".equals(((Busz) values.get(i)).getHova())) {
-					values.remove(i);
-					i--;
-				}
-			}
-		}
+		
 	}
 
 	private String menetidőHozzáadás(Busz busz, int menetido) {

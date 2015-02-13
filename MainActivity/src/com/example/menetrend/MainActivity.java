@@ -30,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.DatePicker;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -136,10 +135,6 @@ public class MainActivity extends FragmentActivity implements Communicator,
 		String ret = "";
 		kivnapDataSource.close();
 		kivnapDataSource.open();
-
-//		Log.v("Simpledateformat",
-//				new SimpleDateFormat("yyyy-MM-dd").format(new Date(dpDate.getYear() - 1900,
-//						dpDate.getMonth(), dpDate.getDayOfMonth())));
 
 		String extra = null;
 		List<KivetelesNap> kk = kivnapDataSource.getAllKivetelesNap();
