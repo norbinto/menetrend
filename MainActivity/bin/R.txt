@@ -38,13 +38,14 @@ int drawable switch_thumb_pressed_holo_dark 0x7f02000f
 int drawable switch_thumb_pressed_holo_light 0x7f020010
 int drawable switch_track_holo_dark 0x7f020011
 int drawable switch_track_holo_light 0x7f020012
-int id btnOk 0x7f08000f
+int id btnCsere 0x7f08000f
+int id btnOk 0x7f080010
 int id button1 0x7f080003
 int id dpDate 0x7f08000d
 int id frameLayout 0x7f080000
 int id linearLayout1 0x7f080008
 int id listView 0x7f080005
-int id menuInfo 0x7f080010
+int id menuInfo 0x7f080011
 int id snHonnan 0x7f08000a
 int id snHova 0x7f08000c
 int id textView1 0x7f080006
@@ -68,6 +69,7 @@ int string honnan 0x7f040006
 int string hova 0x7f040007
 int string keres_s 0x7f040008
 int string menetrend 0x7f040005
+int string oda_vissza 0x7f040009
 int string textOff 0x7f040001
 int string textOn 0x7f040000
 int style AppTheme 0x7f050005

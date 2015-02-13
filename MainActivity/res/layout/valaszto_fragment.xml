@@ -60,6 +60,13 @@
             android:text="@string/hova"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <Button
+            android:id="@+id/btnCsere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClick"
+            android:text="@string/oda_vissza" />
 
         <Button
             android:id="@+id/btnOk"
@@ -68,14 +75,6 @@
             android:layout_gravity="center_horizontal"
             android:onClick="onClick"
             android:text="@string/keres_s" />
-
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOn=""
-            android:text="Switch" />
-
     </LinearLayout>
 
 </RelativeLayout>

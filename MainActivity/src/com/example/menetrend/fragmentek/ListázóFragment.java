@@ -59,14 +59,15 @@ public class ListázóFragment extends Fragment {
 			// időponthoz ugrik
 			Calendar cal = Calendar.getInstance();
 			for (int i = 0; i < values.size(); i++) {
-				int ora = Integer.parseInt(values.get(i).getIndul()
-						.subSequence(0, 2).toString());
-				int perc = Integer.parseInt(values.get(i).getIndul()
-						.subSequence(3, 5).toString());
-				int a = Integer.parseInt(ora + "" + perc);
+				int a = Integer
+						.parseInt(values.get(i).getIndul().subSequence(0, 2)
+								.toString()
+								+ ""
+								+ values.get(i).getIndul().subSequence(3, 5)
+										.toString());
 				int b = Integer.parseInt(cal.get(Calendar.HOUR_OF_DAY) + ""
-						+ cal.get(Calendar.MINUTE));
-//				Log.v("LISTÁZÓFRAGMENT a+b", a + " + " + b);
+						+ (cal.get(Calendar.MINUTE)<10?"0"+cal.get(Calendar.MINUTE):cal.get(Calendar.MINUTE)));
+				Log.v("LISTÁZÓFRAGMENT a+b", a + " + " + b);
 				if (a < b) {
 					try {
 						listView.setSelection(i + 1);
@@ -336,7 +337,7 @@ public class ListázóFragment extends Fragment {
 			for (int i = 0; i < values.size(); i++) {
 				if ("HK".equals(values.get(i).getHonnan())
 						|| "HK".equals(values.get(i).getHova())) {
-					
+
 					if (sámsonDebrecen) {
 						values.get(i).setIndul(
 								menetidőHozzáadás(values.get(i), menetido));

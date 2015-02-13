@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.menetrend.Communicator;
 import com.example.menetrend.Megallo;
@@ -39,7 +41,7 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 	public Communicator comm;
 	public DatePicker dpDate;
 	public TextView tvDate;
-
+	public Button btnCsere;
 
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,10 +61,11 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 		comm = (Communicator) getActivity();
 		dpDate = (DatePicker) getActivity().findViewById(R.id.dpDate);
 		tvDate = (TextView) getActivity().findViewById(R.id.tvDate);
-
+		btnCsere = (Button) getActivity().findViewById(R.id.btnCsere);
 		setCurrentDateOnView();
 
 		btnOk.setOnClickListener(this);
+		btnCsere.setOnClickListener(this);
 		snHonnan.setOnItemSelectedListener(this);
 		snHova.setOnItemSelectedListener(this);
 		dpDate.setOnClickListener(this);
@@ -124,9 +127,21 @@ public class VálasztóFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		
-		comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
-				+ ((Megallo) snHova.getSelectedItem()).getId());
+		switch (v.getId()) {
+		case R.id.btnOk:
+			comm.üzenet(((Megallo) snHonnan.getSelectedItem()).getId() + ";"
+					+ ((Megallo) snHova.getSelectedItem()).getId());
+			break;
+
+		case R.id.btnCsere:
+			int tmp = snHonnan.getSelectedItemPosition();
+			snHonnan.setSelection(snHova.getSelectedItemPosition());
+			snHova.setSelection(tmp);
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	public int getYear() {
